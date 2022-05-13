@@ -23,7 +23,7 @@ def qna(cnt, n, dash_cnt):
     dash_cnt += 1
     qna(cnt, n, dash_cnt)
 
-    print(dash * (dash_cnt-1) + "라고 답변하였지.")
+    print(dash * (dash_cnt - 1) + "라고 답변하였지.")
 
 
 cnt = 0
