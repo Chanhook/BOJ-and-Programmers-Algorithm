@@ -1,0 +1,31 @@
+def solution(triangle):
+    answer = 0
+    '''
+    정방향
+    t_h = len(triangle)
+    t_w = [[0 for _ in range(layer+1)] for layer in range(t_h)]
+    t_w[0][0] = triangle[0][0]
+    
+    for layer in range(1,t_h):
+        for room in range(layer+1):
+            if room == 0:
+                t_w[layer][room] = t_w[layer-1][room] + triangle[layer][room] 
+            elif room == layer:
+                t_w[layer][room] = t_w[layer-1][room-1] + triangle[layer][room]
+            else:
+                t_w[layer][room] = max(t_w[layer-1][room-1],t_w[layer-1][room]) + triangle[layer][room]
+    
+    answer = max(t_w[-1])
+    '''
+    
+    # 역방향
+    t_h = len(triangle)
+    rvs_t_w = [[0 for _ in range(layer)] for layer in range(t_h,0,-1)]
+    rvs_t_w[0] = triangle[-1]
+    
+    for layer in range(1,t_h):
+        for room in range(t_h - layer):
+            rvs_t_w[layer][room] = max(rvs_t_w[layer-1][room],rvs_t_w[layer-1][room+1]) + triangle[t_h - layer - 1][room]
+            
+    answer = rvs_t_w[-1][0]
+    return answer
