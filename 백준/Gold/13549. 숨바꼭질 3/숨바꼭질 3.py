@@ -23,7 +23,7 @@ while q :
         q.append(x-1)
         arr[x-1] = arr[x] + 1
     if 0 <= x*2 < MAX and arr[x*2] == -1:
-        q.append(x*2)
+        q.appendleft(x*2)
         arr[x*2] = arr[x]
     if 0 <= x+1 < MAX and arr[x+1] == -1:
         q.append(x+1)
