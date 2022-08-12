@@ -1,24 +1,31 @@
-import re
 import sys
 
 n = int(sys.stdin.readline().strip())
-solution = list(map(int, sys.stdin.readline().split()))
-solution.sort()
-answer = []
-s, e = 0, n - 1
-value = 2e9 + 1
+solutions = list(map(int, sys.stdin.readline().split()))
+solutions.sort()
 
-while s < e:
-    start = solution[s]
-    end = solution[e]
-    result = start + end
-    if abs(result) < value:
-        value = abs(result)
-        answer = [start, end]
+l = 0
+r = n-1
+value = 2000000000
 
-    if result < 0:
-        s += 1
+while l < r:
+    x = solutions[l]+solutions[r]
+    if x == 0:
+        ll = l
+        rr = r
+        break
     else:
-        e -= 1
+        if x < 0:
+            if abs(x) < value:
+                value = abs(x)
+                ll = l
+                rr = r
+            l += 1
+        elif x > 0:
+            if abs(x) < value:
+                value = abs(x)
+                ll = l
+                rr = r
+            r -= 1
 
-print(*answer)
+print(solutions[ll], solutions[rr])
