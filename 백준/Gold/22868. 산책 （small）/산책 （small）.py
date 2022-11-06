@@ -28,9 +28,8 @@ def go_bfs(start, end, visit, start_cnt) -> list:
     q.append((start, start_cnt))
     while q:
         cur_node, cur_cnt = q.popleft()
-        if cur_node == end:
-            if start_cnt == 0:
-                break
+        # if cur_node == end and start_cnt == 0:
+        #     break
         get_adj_node(visit, q, cur_node, cur_cnt)
 
     path = [end]
@@ -38,7 +37,8 @@ def go_bfs(start, end, visit, start_cnt) -> list:
     while next != 0:
         path.append(next)
         next = visit[next]
-
+# [-1,0,1,1,2]
+#[4,2]
     return path[:-1]
 
 
