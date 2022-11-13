@@ -46,9 +46,16 @@ def bfs(sx, sy, H, D, visited):
             if nxt_h == 0:
                 continue
 
-            if visited[nx][ny] < nxt_h:
-                visited[nx][ny] = nxt_h
+            # 예외조건 추가
+            if visited[nx][ny] < nxt_h+nxt_d:
+                visited[nx][ny] = nxt_h+nxt_d
                 q.append((nx, ny, nxt_h, nxt_d, cnt+1))
+
+            # 70% 에서 터짐
+            # if not visited[nx][ny]:
+            #     visited[nx][ny] = 1
+            #     q.append((nx, ny, nxt_h, nxt_d, cnt+1))
+
     return -1
 
 
