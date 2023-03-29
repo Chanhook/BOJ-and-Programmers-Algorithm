@@ -24,8 +24,8 @@ def solution(n, m, x, y, r, c, k):
             cur_path.pop()
             cur_k -= 1        
     
-    z = k - abs(x - r) - abs(y - c)
-    if z < 0 or z % 2 != 0:
+    diff = abs(x-r)+abs(y-c)
+    if diff%2 != k%2 or diff > k:
         return 'impossible'
     
     answer = []
