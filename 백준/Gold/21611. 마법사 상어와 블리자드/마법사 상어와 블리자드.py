@@ -136,7 +136,6 @@ for _ in range(M):
     convert_to_line()
     while destroy_by_rule() != 0:
         remove_zero()
-    remove_zero()
     change_by_rule()
     convert_to_mat()
 
