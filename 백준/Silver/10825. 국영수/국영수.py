@@ -1,9 +1,6 @@
 n = int(input().strip())
-info = []
-for i in range(n):
-    name, kor, math, eng = input().split()
-    info.append((name, int(kor), int(math), int(eng)))
+info = [input().split() for _ in range(n)]
 
-sorted_info = sorted(info, key=lambda x: (-x[1], x[2], -x[3], x[0]))
-for i in sorted_info:
-    print(i[0])
+sorted_info = sorted(info, key=lambda x: (-int(x[1]), int(x[2]), -int(x[3]), x[0]))
+for student in sorted_info:
+    print(student[0])
