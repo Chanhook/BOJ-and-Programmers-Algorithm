@@ -1,17 +1,18 @@
 import sys
 
-n = int(input())
-a = list(map(int, sys.stdin.readline().split()))
+input = sys.stdin.readline
 
-dp = [0 for _ in range(n)]
+n = int(input().strip())
+arr = list(map(int, input().split()))
 
-for k in range(n):
-    dp[k] = 1
-    for i in range(k):
-        # print(k,a[k],i,a[i])
-        if a[i] < a[k]:
-            # print("prev",dp)
-            dp[k] = max(dp[k], dp[i] + 1)
-            # print("next",dp)
+dp = [1] * n
+
+temp_max = 0
+for i in range(1, n):
+    for j in range(i):
+        if arr[j] < arr[i]:
+            temp_max = max(dp[j], temp_max)
+    dp[i] = temp_max + 1
+    temp_max = 0
 
 print(max(dp))
