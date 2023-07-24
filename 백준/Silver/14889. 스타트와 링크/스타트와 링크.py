@@ -7,6 +7,8 @@ visited = [False for _ in range(n)]
 graph = [list(map(int, input().split())) for _ in range(n)]
 min_diff = int(1e9)
 
+visited[0] = True
+
 
 def dfs(depth, idx):
     if depth == n // 2:
@@ -29,5 +31,5 @@ def dfs(depth, idx):
             visited[i] = False
 
 
-dfs(0, 0)
+dfs(1, 0)
 print(min_diff)
