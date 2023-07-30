@@ -1,31 +1,37 @@
 import sys
+from collections import deque
 
-n, m = map(int, sys.stdin.readline().split())
+input = sys.stdin.readline
 
-graph = {i: set() for i in range(1, n + 1)}
-
+n, m = map(int, input().split())
+arr = [[] for _ in range(n)]
 for _ in range(m):
-    u, v = map(int, sys.stdin.readline().split())
-    graph[u].add(v)
-    graph[v].add(u)
+    a, b = map(int, input().split())
+    arr[a-1].append(b-1)
+    arr[b-1].append(a-1)
 
-# print(graph)
-
-
-visit = [0] * (n + 1)
+visited = [0] * n
+result = 0
 
 
-def dfs(graph, i):
-    visit[i] = 1
-    for i in graph[i]:
-        if not visit[i]:
-            dfs(graph, i)
+def bfs(x):
+    visited[x] = 1
+    q = deque()
+    q.append(x)
+
+    while q:
+        node = q.popleft()
+
+        for next_node in arr[node]:
+            if not visited[next_node]:
+                visited[next_node] = 1
+                q.append(next_node)
+
+    return 1
 
 
-cnt = 0
-for i in range(1, n + 1):
-    if not visit[i]:
-        dfs(graph, i)
-        cnt += 1
+for i in range(n):
+    if not visited[i]:
+        result += bfs(i)
 
-print(cnt)
+print(result)
