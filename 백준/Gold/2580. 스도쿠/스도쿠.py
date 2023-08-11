@@ -1,55 +1,42 @@
 import sys
 
-graph = []
-blank = []
 
-for i in range(9):
-    graph.append(list(map(int, sys.stdin.readline().rstrip().split())))
+def possible(x, y, num):
+    # 가로
+    if num in board[x]:
+        return False
 
-for i in range(9):
-    for j in range(9):
-        if graph[i][j] == 0:
-            blank.append((i, j))
-
-
-def checkRow(x, a):
+    # 세로
     for i in range(9):
-        if a == graph[x][i]:
+        if num == board[i][y]:
             return False
-    return True
 
-
-def checkCol(y, a):
-    for i in range(9):
-        if a == graph[i][y]:
-            return False
-    return True
-
-
-def checkRect(x, y, a):
-    nx = x // 3 * 3
-    ny = y // 3 * 3
-    for i in range(3):
-        for j in range(3):
-            if a == graph[nx + i][ny + j]:
+    # 사각형
+    dx, dy = x // 3, y // 3
+    for i in range(dx * 3, dx * 3 + 3):
+        for j in range(dy * 3, dy * 3 + 3):
+            if board[i][j] == num:
                 return False
+
     return True
 
 
-def dfs(idx):
-    if idx == len(blank):
-        for i in range(9):
-            print(*graph[i])
-        exit(0)
+def sudoku(blank_idx):
+    if blank_idx == len(blanks):
+        for line in board:
+            print(*line)
+        sys.exit()
 
-    for i in range(1, 10):
-        x = blank[idx][0]
-        y = blank[idx][1]
-
-        if checkRow(x, i) and checkCol(y, i) and checkRect(x, y, i):
-            graph[x][y] = i
-            dfs(idx + 1)
-            graph[x][y] = 0
+    x, y = blanks[blank_idx]
+    for num in range(1, 10):
+        if possible(x, y, num):
+            board[x][y] = num
+            sudoku(blank_idx + 1)
+            board[x][y] = 0
 
 
-dfs(0)
+input = sys.stdin.readline
+board = [list(map(int, input().split())) for _ in range(9)]
+blanks = [(i, j) for i in range(9) for j in range(9) if board[i][j] == 0]
+answer = []
+sudoku(0)
