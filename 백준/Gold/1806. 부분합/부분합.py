@@ -12,12 +12,9 @@ else:
     total = 0
     while r < n:
         total += arr[r]
-        if total < s:
-            r += 1
-        else:
-            while total >= s:
-                ans = min(r - l + 1, ans)
-                total -= arr[l]
-                l += 1
-            r += 1
+        while total >= s:
+            ans = min(r - l + 1, ans)
+            total -= arr[l]
+            l += 1
+        r += 1
     print(ans)
