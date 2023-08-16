@@ -1,34 +1,18 @@
-from os import times_result
 import sys
 
-N = int(sys.stdin.readline().strip())
+input = sys.stdin.readline
+n = int(input().strip())
+info = [list(map(int, input().split())) for _ in range(n)]
+sorted_info = sorted(info, key=lambda x: (x[0], x[1]))
 
-times = []
-for i in range(N):
-    s, e = map(int, sys.stdin.readline().split())
-    times += [[s, e]]
-
-times.sort(key=lambda x: (x[1], x[0]))
-
-s, e = times[0]
-cnt = 1
-for time in times[1:]:
-    ns, ne = time
-    if e <= ns:
+ans = 1
+s, e = sorted_info[0]
+for i in range(1, n):
+    ns, ne = sorted_info[i]
+    if ne < e:
         s, e = ns, ne
-        cnt += 1
-    else:
-        continue
+    elif ns >= e:
+        s, e = ns, ne
+        ans += 1
 
-print(cnt)
-
-"""
-반례
-2
-1 1
-0 1
-
-x[1]로만 정렬했기 때문에
-[[1,1],[0,1]]로 들어가기 때문에
-2가 아닌 1로 나왔다.
-"""
+print(ans)
