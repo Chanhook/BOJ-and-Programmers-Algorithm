@@ -1,43 +1,84 @@
+parent = [[(r, c) for c in range(51)] for r in range(51)]
+cells = [['EMPTY'] * 51 for _ in range(51)]
+result = []
+
+
+def find(r, c):
+    if (r, c) == parent[r][c]:
+        return parent[r][c]
+    pr, pc = parent[r][c]
+    parent[r][c] = find(pr, pc)
+    return parent[r][c]
+
+
+def union(r1, c1, r2, c2):
+    parent[r2][c2] = parent[r1][c1]
+
+
+def UPDATE(r, c, msg):
+    pr, pc = find(r, c)
+    cells[pr][pc] = msg
+
+
+def UPDATE_VAL(msg1, msg2):
+    for r in range(51):
+        for c in range(51):
+            pr, pc = find(r, c)
+            if cells[pr][pc] == msg1:
+                cells[pr][pc] = msg2
+
+
+def MERGE(r1, c1, r2, c2):
+    r1, c1 = find(r1, c1)
+    r2, c2 = find(r2, c2)
+
+    if (r1, c1) == (r2, c2):
+        return
+    if cells[r1][c1] != "EMPTY":
+        union(r1, c1, r2, c2)
+    else:
+        union(r2, c2, r1, c1)
+
+
+def UNMERGE(r, c):
+    pr, pc = find(r, c)
+    msg = cells[pr][pc]
+
+    merge_list = list()
+    for ar in range(51):
+        for ac in range(51):
+            apr, apc = find(ar, ac)
+            if (apr, apc) == (pr, pc):
+                merge_list.append((ar, ac))
+
+    for ar, ac in merge_list:
+        parent[ar][ac] = (ar, ac)
+        cells[ar][ac] = "EMPTY" if (ar, ac) != (r, c) else msg
+
+
+def PRINT(r, c):
+    pr, pc = find(r, c)
+    result.append(cells[pr][pc])
+
+
 def solution(commands):
-    answer = []
-    merged = [[(i, j) for j in range(50)] for i in range(50)]
-    content = [["EMPTY"] * 50 for _ in range(50)]
     for command in commands:
-        command = command.split(' ')
-        if command[0] == 'UPDATE':
-            if len(command) == 4:
-                r, c, value = int(command[1]) - 1, int(command[2]) - 1, command[3]
-                x, y = merged[r][c]
-                content[x][y] = value
-            elif len(command) == 3:
-                value1, value2 = command[1], command[2]
-                for i in range(50):
-                    for j in range(50):
-                        if content[i][j] == value1:
-                            content[i][j] = value2
-        elif command[0] == 'MERGE':
-            r1, c1 = int(command[1]) - 1, int(command[2]) - 1
-            r2, c2 = int(command[3]) - 1, int(command[4]) - 1
-            x1, y1 = merged[r1][c1]
-            x2, y2 = merged[r2][c2]
-            if content[x1][y1] == 'EMPTY':
-                content[x1][y1] = content[x2][y2]
-            for i in range(50):
-                for j in range(50):
-                    if merged[i][j] == (x2, y2):
-                        merged[i][j] = (x1, y1)
-        elif command[0] == 'UNMERGE':
-            r, c = int(command[1]) - 1, int(command[2]) - 1
-            x, y = merged[r][c]
-            tmp = content[x][y]
-            for i in range(50):
-                for j in range(50):
-                    if merged[i][j] == (x, y):
-                        merged[i][j] = (i, j)
-                        content[i][j] = 'EMPTY'
-            content[r][c] = tmp
-        elif command[0] == 'PRINT':
-            r, c = int(command[1]) - 1, int(command[2]) - 1
-            x, y = merged[r][c]
-            answer.append(content[x][y])
-    return answer
+        cmd, *arg = command.split()
+        if cmd == "UPDATE":
+            if len(arg) == 3:
+                r, c, value = arg
+                UPDATE(int(r), int(c), value)
+            else:
+                value1, value2 = arg
+                UPDATE_VAL(value1, value2)
+        elif cmd == "MERGE":
+            r1, c1, r2, c2 = map(int, arg)
+            MERGE(r1, c1, r2, c2)
+        elif cmd == "UNMERGE":
+            r, c = map(int, arg)
+            UNMERGE(r, c)
+        else:
+            r, c = map(int, arg)
+            PRINT(r, c)
+
+    return result
