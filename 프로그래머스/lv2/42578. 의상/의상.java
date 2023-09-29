@@ -2,29 +2,15 @@ import java.util.*;
 
 class Solution {
     public int solution(String[][] clothes) {
-        int answer = 0;
-        String item = "";
-        String category = "";
-        
-        Map<String, List<String>> clothMap = new HashMap<>();
-        
-        for(String[] cloth : clothes) {
-            item = cloth[0];
-            category = cloth[1];
-            
-            if (!clothMap.containsKey(category)) {
-                clothMap.put(category, new ArrayList<>());
-            }
-            
-            clothMap.get(category).add(item);
+        Map<String, Integer> map = new HashMap<>();
+        for (String[] clothe : clothes) {
+            map.put(clothe[1], map.getOrDefault(clothe[1], 0) + 1);
         }
-        
-        int combi = 1;
-        for (String key : clothMap.keySet()) {
-            combi *= clothMap.get(key).size() + 1;
+        int answer = 1;
+        for (String s : map.keySet()) {
+            int cnt = map.get(s);
+            answer *= (cnt + 1);
         }
-        answer = combi - 1;
-        
-        return answer;
+        return answer - 1;
     }
 }
