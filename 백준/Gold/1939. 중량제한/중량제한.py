@@ -1,20 +1,18 @@
 from collections import deque
 import sys
 
-
-def bfs(weight, start, end):
+def bfs2(weight, start, end):
     q = deque()
-    q.append(start)
-    visit = [0] * (n + 1)
-    visit[start] = 1
+    q.append((weight, start))
+    visited = [0] * (n + 1)
+    visited[start] = 1
     while q:
-        now = q.popleft()
-        for next, next_weight in graph[now]:
-            if not visit[next] and next_weight >= weight:
-                visit[next] = 1
-                q.append(next)
-
-    if visit[end]:
+        now_weight, now = q.popleft()
+        for next_island, next_weight in graph[now]:
+            if not visited[next_island] and next_weight >= weight:
+                visited[next_island] = 1
+                q.append((next_weight, next_island))
+    if visited[end]:
         return True
     else:
         return False
@@ -34,7 +32,7 @@ lo, hi = 1, int(1e9),
 res = 0
 while lo <= hi:
     mid = lo + (hi - lo) // 2
-    if bfs(mid, island1, island2):
+    if bfs2(mid, island1, island2):
         res = mid
         lo = mid + 1
     else:
