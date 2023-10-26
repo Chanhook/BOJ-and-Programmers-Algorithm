@@ -19,7 +19,7 @@ class Solution {
         int answer = 0;
 
         Arrays.sort(citations);
-        for (int i = 10000; i > 0; i--) {
+        for (int i = citations[citations.length-1]; i > 0; i--) {
             int idx = binarySearchLower(i, citations);
             if (citations.length - idx >= i) {
                 answer = i;
