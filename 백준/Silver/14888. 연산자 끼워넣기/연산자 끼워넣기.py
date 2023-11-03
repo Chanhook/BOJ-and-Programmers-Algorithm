@@ -1,10 +1,11 @@
-n = int(input().strip())
+import sys
+
+n = int(input())
 nums = list(map(int, input().split()))
 operators = list(map(int, input().split()))
 
-max_value = -int(1e10)
-min_value = int(1e10)
-used = [0] * n
+max_value = -sys.maxsize
+min_value = sys.maxsize
 
 
 def calc(i, now, num_idx):
