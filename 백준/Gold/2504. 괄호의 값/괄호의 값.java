@@ -11,72 +11,48 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String str = br.readLine();
-        String[] split = str.split("");
+        Stack<Character> stack = new Stack<>();
+        int result = 0;
+        int value = 1;
 
-        Stack<Object> stack = new Stack<>();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '(') {
+                stack.push(c);
+                value *= 2;
+            } else if (c == '[') {
+                stack.push(c);
+                value *= 3;
+            } else if (c == ')') {
+                if (stack.isEmpty() || stack.peek() != '(') {
+                    result = 0;
+                    break;
+                } else if (str.charAt(i - 1) == '(') {
+                    result += value;
+                }
+                stack.pop();
+                value /= 2;
+            } else if (c == ']') {
+                if (stack.isEmpty() || stack.peek() != '[') {
+                    result = 0;
+                    break;
+                } else if (str.charAt(i - 1) == '[') {
+                    result += value;
+                }
+                stack.pop();
+                value /= 3;
+            }
+        }
 
-        int value = getValue(split, stack);
-        bw.write(value + "\n");
+        if (!stack.isEmpty()) {
+            bw.write(0 + "\n");
+        } else {
+            bw.write(result + "\n");
+        }
+
         bw.flush();
         br.close();
         bw.close();
-    }
-
-    private static int getValue(String[] split, Stack<Object> stack) {
-        for (String s : split) {
-            if (s.equals("(") || s.equals("[")) {
-                stack.push(s);
-            } else if (s.equals(")")) {
-                int temp = 0;
-                while (!stack.isEmpty() && !stack.peek().equals("(")) {
-                    Object obj = stack.pop();
-                    if (obj instanceof String) {
-                        return 0;
-                    } else {
-                        temp += (int) obj;
-                    }
-                }
-                if (stack.isEmpty()) {
-                    return 0;
-                }
-                stack.pop();
-                if (temp == 0) {
-                    stack.push(2);
-                } else {
-                    stack.push(2 * temp);
-                }
-            } else if (s.equals("]")) {
-                int temp = 0;
-                while (!stack.isEmpty() && !stack.peek().equals("[")) {
-                    Object obj = stack.pop();
-                    if (obj instanceof String) {
-                        return 0;
-                    } else {
-                        temp += (int) obj;
-                    }
-                }
-                if (stack.isEmpty()) {
-                    return 0;
-                }
-                stack.pop();
-                if (temp == 0) {
-                    stack.push(3);
-                } else {
-                    stack.push(3 * temp);
-                }
-            }
-        }
-
-        int result = 0;
-        while (!stack.isEmpty()) {
-            Object obj = stack.pop();
-            if (obj instanceof String) {
-                return 0;
-            }
-            result += (int) obj;
-        }
-        return result;
-
     }
 
 }
