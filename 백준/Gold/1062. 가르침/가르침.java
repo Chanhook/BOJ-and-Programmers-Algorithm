@@ -1,69 +1,78 @@
-import java.util.*;
- 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
 public class Main {
- 
+
     static int n, k;
-    static int max = Integer.MIN_VALUE;
-    static boolean[] visited;
-    static String[] word;
-    
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
- 
-        n = scan.nextInt();
-        k = scan.nextInt();
-        
-        scan.nextLine();
-        word = new String[n];
-        for(int i = 0; i < n; i++) {
-            String str = scan.nextLine();
-            str = str.replace("anta", "");
-            str = str.replace("tica", "");
-            word[i] = str;
+    static int maxValue = Integer.MIN_VALUE;
+    static boolean[] learn;
+    static String[] words;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+
+        words = new String[n];
+        for (int i = 0; i < n; i++) {
+            String s = br.readLine();
+            s = s.replace("anta", "");
+            s = s.replace("tica", "");
+            words[i] = s;
         }
-        
-        if(k < 5) { //a c i n t의 개수가 5개이므로
-            System.out.println("0");
-            return;
-        } else if(k == 26) { //모든 알파벳을 다 읽을 수 있다.
-            System.out.println(n);
-            return;
+
+        if (k < 5) {
+            bw.write(0 + "\n");
+        } else if (k == 26) {
+            bw.write(n + "\n");
+        } else {
+            learn = new boolean[26];
+            learn['a' - 'a'] = true;
+            learn['c' - 'a'] = true;
+            learn['i' - 'a'] = true;
+            learn['n' - 'a'] = true;
+            learn['t' - 'a'] = true;
+
+            backtracking(0, 0);
+            bw.write(maxValue + "\n");
         }
-        
-        visited = new boolean[26]; //각 알파벳을 배웠는지 체크
-        visited['a' - 'a'] = true;
-        visited['c' - 'a'] = true;
-        visited['i' - 'a'] = true;
-        visited['n' - 'a'] = true;
-        visited['t' - 'a'] = true;
-        
-        backtracking(0, 0);
-        System.out.println(max);
+
+        bw.flush();
     }
-    
-    public static void backtracking(int alpha, int len) {
-        if(len == k - 5) {
+
+    private static void backtracking(int alp, int len) {
+        if (len == k - 5) {
             int count = 0;
-            for(int i = 0; i < n; i++) { //뽑은 알파벳으로 몇개의 단어를 읽을 수 있는지 카운트.
-                boolean read = true;
-                for(int j = 0; j < word[i].length(); j++) {
-                    if(!visited[word[i].charAt(j) - 'a']) {
-                        read = false;
+            for (int i = 0; i < n; i++) {
+                boolean readable = true;
+                for (int j = 0; j < words[i].length(); j++) {
+                    if (!learn[words[i].charAt(j) - 'a']) {
+                        readable = false;
                         break;
                     }
                 }
-                if(read) count++;
+                if (readable) {
+                    count++;
+                }
             }
-            max = Math.max(max, count);
+            maxValue = Math.max(count, maxValue);
             return;
         }
-        
-        for(int i = alpha; i < 26; i++) {
-            if(visited[i] == false) {
-                visited[i] = true;
+
+        for (int i = alp; i < 26; i++) {
+            if (!learn[i]) {
+                learn[i] = true;
                 backtracking(i, len + 1);
-                visited[i] = false;
+                learn[i] = false;
             }
         }
+
     }
 }
