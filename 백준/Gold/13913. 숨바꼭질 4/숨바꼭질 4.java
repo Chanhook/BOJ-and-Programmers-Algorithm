@@ -30,9 +30,11 @@ public class Main {
         }
 
         System.out.println(time);
-        while (!stack.isEmpty()) {
-            System.out.print(stack.pop() + " ");
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()){
+            sb.append(stack.pop()).append(" ");
         }
+        System.out.println(sb);
     }
 
     private static int bfs(int n, int k) {
